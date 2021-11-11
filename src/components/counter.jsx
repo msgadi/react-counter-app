@@ -1,17 +1,23 @@
-import React,{useState} from 'react'
+import {useState} from 'react'
 
-const Counter = () => {
-    const [count, setCount] = useState(0)
+const Counter = ({initialCount}) => {
+    const [count, setCount] = useState(initialCount)
     const handleIncrementCount =()=>{
         setCount(count + 1);
     }
 
-    const formatCount = () => count > 0 ? count : 'zero';
+    const handleDecrementCount =()=>{
+        setCount(count - 1);
+    }
+ 
+    const formatCount = () => count > 0 ? count : 'zero'; 
+    const getBadgeClass = () => count === 0 ? "badge bg-warning " :"";
 
     return ( <>  
-        <div> 
-            <h1 className={count === 0 ? "badge bg-secondary m-2" :""}>{ formatCount()   }</h1> 
-            <button className="btn btn-primary" onClick={ handleIncrementCount}>+</button>
+        <div className="container"> 
+            <span className={ "ml-2 " + getBadgeClass()}>{ formatCount()}</span> 
+            <button className="btn btn-primary m-5" onClick={ handleIncrementCount}>+</button>
+            <button className={`btn btn-${ count > 0 ? 'primary' : 'secondary disabled'}`} onClick={ handleDecrementCount}>-</button>
         </div>
     </> );
 }
