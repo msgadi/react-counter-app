@@ -15,11 +15,11 @@ jobs:
         uses: boasihq/interactive-inputs@main
         with:
           ngrok-authtoken: ${{ secrets.NGROK_AUTHTOKEN }}
-          notifier-slack-enabled: 'false'
-          notifier-slack-channel: '#notificaitons'
-          notifier-slack-token: ${{ secrets.SLACK_TOKEN }}
-          notifier-discord-enabled: 'false'
-          notifier-discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          #   notifier-slack-enabled: 'false'
+          #   notifier-slack-channel: '#notificaitons'
+          #   notifier-slack-token: ${{ secrets.SLACK_TOKEN }}
+          #   notifier-discord-enabled: 'false'
+          #   notifier-discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
           timeout: 160
           title: 'A batch of 10 feature flags have been added to be deployed. Would you like to proceed?'
           interactive: |
