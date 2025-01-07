@@ -1,7 +1,7 @@
 name: '[Example] Interactive Inputs'
 
 on:
-  push:
+  workflow_dispatch:
 
 jobs:
   interactive-inputs:
@@ -9,97 +9,45 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      actions: write
     steps:
       - name: Example Interactive Inputs Step
         id: interactive-inputs
-        uses: boasihq/interactive-inputs@v2
+        uses: boasihq/interactive-inputs@main
         with:
           ngrok-authtoken: ${{ secrets.NGROK_AUTHTOKEN }}
           notifier-slack-enabled: 'false'
           notifier-slack-channel: '#notificaitons'
           notifier-slack-token: ${{ secrets.SLACK_TOKEN }}
-          notifier-slack-thread-ts: ''
           notifier-discord-enabled: 'false'
           notifier-discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          notifier-discord-thread-id: ''
           timeout: 160
           title: 'A batch of 10 feature flags have been added to be deployed. Would you like to proceed?'
           interactive: |
             fields:
-              - label: overview
+              - label: continue-roll-out
                 properties:
-                  type: textarea
-                  description: Information on what this action does
-                  defaultValue: "This example is a powerful demonstration of how you can utilize the boasiHQ/interactive-inputs action to tailor the dynamic portal to your specific needs and desired output."
-                  readOnly: true
-              - label: custom-file
+                  display: Continue to roll out?
+                  defaultValue: 'false'
+                  type: boolean
+                  required: true
+              - label: exclude-domains
                 properties:
-                  display: Choose a file
-                  type: file
-                  description: Select the media you wish to send to the channel
-                  acceptedFileTypes:
-                    - image/png
-                    - video/mp4
+                  description: Select the domains to exclude from the roll out
+                  display: Exclude domain(s)
+                  type: multiselect
+                  choices: 
+                    ["Payments", "Bookings", "Notifications", "Support"]
               - label: requested-files
                 properties:
                   display: Upload desired files
                   type: multifile
                   required: true
                   description: Upload desired files that are to be uploaded to the runner for processing
-              - label: name
+              - label: notes
                 properties:
-                  display: What is your name?
-                  type: text
-                  description: Name of the user
-                  maxLength: 20
-                  required: true
-              - label: age
-                properties:
-                  display: How old are you?
-                  type: number
-                  description: Age of the user
-                  placeholder: 18
-                  maxNumber: 110
-                  minNumber: 4
-                  required: false
-              - label: car
-                properties:
-                  display: Favourite Car
-                  type: select
-                  description: The name of your favourite car
-                  disableAutoCopySelection: false
-                  choices:
-                    - Ford
-                    - Toyota
-                    - Honda
-                    - Volvo
-                    - BMW
-                    - Mercedes
-                    - Audi
-                    - Lexus
-                    - Tesla
-                    - Other
-                  required: true
-              - label: colour
-                properties:
-                  display: What are your favourite colours
-                  type: multiselect
-                  disableAutoCopySelection: true
-                  choices: 
-                    ["Red", "Green", "Blue", "Orange", "Purple", "Pink", "Yellow"]
-                  required: true
-              - label: verify
-                properties:
-                  display: Are you sure you want to continue?
-                  defaultValue: 'false'
-                  type: boolean
-                  required: true'
-              - label: additional-info
-                properties:
+                  display: Additional note(s)
                   type: textarea
-                  display: More information
-                  description: Any more information you would like to add
+                  description: Additional notes on why this decision has been made are to be added to the audit trail.
 
       - name: Display Outputs
         shell: bash
