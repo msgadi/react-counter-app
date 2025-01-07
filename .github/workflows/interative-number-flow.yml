@@ -1,0 +1,63 @@
+name: '[Example] Match generated number flow'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  interactive-inputs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - name: Generate random number
+        id: get-random-number
+        uses: actions/github-script@v7
+        with:
+          result-encoding: string
+          # Script for generating random number sourced from: https://stackoverflow.com/a/7228322
+          script: |
+            function randomIntFromInterval(min, max) { // min and max included 
+              return Math.floor(Math.random() * (max - min + 1) + min);
+            }
+
+            return randomIntFromInterval(1, 5);
+
+      - name: Example Interactive Inputs Step
+        id: interactive-inputs
+        uses: boasiHQ/interactive-inputs@v2
+        with:
+          timeout: 300
+          title: 'We need you to select your desired flow(s) to execute'
+          interactive: |
+            fields:
+              - label: display-number
+                properties:
+                  description: This is a generated number
+                  display: Generated Number
+                  type: textarea
+                  defaultValue: ${{ steps.get-random-number.outputs.result }}
+                  readOnly: true
+              - label: selected-number
+                properties:
+                  description: Match the generated number specified in the text field above
+                  display: Enter the number you see above
+                  type: number
+                  required: true
+          notifier-slack-enabled: 'false'
+          notifier-slack-channel: '#random'
+          notifier-slack-token: ${{ secrets.SLACK_TOKEN }}
+          notifier-discord-enabled: 'false'
+          notifier-discord-webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          github-token: ${{ github.token }}
+          ngrok-authtoken: ${{ secrets.NGROK_AUTHTOKEN }}
+
+      - name: Check if number matches
+        id: check-number
+        shell: bash
+        run: |
+          if [[ ${{ steps.interactive-inputs.outputs.selected-number }} -eq ${{ steps.get-random-number.outputs.result }} ]]; then
+            echo "The number matches!"
+          else
+            echo "The number does not match."
+          fi
