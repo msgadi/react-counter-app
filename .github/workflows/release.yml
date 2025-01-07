@@ -11,6 +11,13 @@ on:
           - patch
           - minor
           - major
+      otp_option:
+        description: Should we use optic or alternate OTP option
+        required: true
+        type: choice
+        options:
+          - optic
+          - alternate
   pull_request:
     types: [closed]
 
