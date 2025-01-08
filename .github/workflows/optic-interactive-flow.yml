@@ -1,4 +1,4 @@
-name: '[Example] Match generated number flow'
+name: 'Interactive Number Flow'
 
 on:
   workflow_dispatch:

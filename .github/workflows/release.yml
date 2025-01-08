@@ -30,7 +30,7 @@ jobs:
       pull-requests: write
       id-token: write
     steps:
-      - uses: nearform-actions/optic-release-automation-action@v4
+      - uses: msgadi/optic-release-automation-action@adding-alternate-flow
         with:
           npm-token: >-
             ${{ secrets[format('NPM_TOKEN_{0}', github.actor)] ||
